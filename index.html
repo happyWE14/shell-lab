@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101018">
+  <meta name="description" content="在模拟终端中练习 Linux 命令，完成十二个目录、文件、日志和服务器排障任务。">
+  <title>Shell Lab · Linux 命令实训</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="shell.js"></script>
+  <script defer src="missions.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="top-inner">
+      <a class="brand" href="#missions" aria-label="Shell Lab 闯关训练">
+        <span class="brand-icon" aria-hidden="true">&gt;_</span>
+        <span>Shell<span class="brand-accent">Lab</span><small>LINUX 命令实训</small></span>
+      </a>
+      <nav class="top-nav" aria-label="训练模式">
+        <button class="nav-button active" id="missions-mode" type="button" aria-pressed="true"><span data-icon="flag"></span>闯关训练</button>
+        <button class="nav-button" id="free-mode" type="button" aria-pressed="false"><span data-icon="terminal"></span>自由练习</button>
+      </nav>
+      <button id="guide" class="guide-button" type="button"><span data-icon="book"></span><span>命令速查</span></button>
+    </div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar" aria-label="关卡目录">
+      <div class="sidebar-top">
+        <div class="sidebar-heading"><span data-icon="layers"></span><h2>训练地图</h2><span class="sidebar-count" id="sidebar-count"></span></div>
+        <div class="progress-card">
+          <div class="progress-meta"><span>通关进度</span><strong id="progress-value">0 / 12</strong></div>
+          <progress id="progress-bar" max="12" value="0" aria-label="通关进度"></progress>
+        </div>
+      </div>
+      <button class="map-toggle" type="button" id="map-toggle" aria-expanded="false" aria-controls="level-list">查看 12 个关卡<span data-icon="chevron"></span></button>
+      <nav class="level-list" id="level-list" aria-label="训练关卡"></nav>
+      <div class="sidebar-footer"><span data-icon="save"></span><span id="storage-label">进度保存在当前浏览器</span></div>
+    </aside>
+
+    <main class="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="hero-label"><span class="status-dot"></span><span id="hero-mode">交互式 Linux 实验室</span></div>
+          <h1 id="hero-title">Linux 命令练习场</h1>
+          <p id="hero-desc">在模拟终端里动手，从找文件到排查服务日志。</p>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-grid"></div>
+          <div class="hero-window"><i></i><i></i><i></i><b>&gt;<em>_</em></b></div>
+          <span class="hero-spark hero-spark-a">+</span><span class="hero-spark hero-spark-b">+</span>
+        </div>
+      </section>
+
+      <section class="exercise" aria-labelledby="exercise-title">
+        <div class="exercise-heading">
+          <div class="exercise-name"><span class="exercise-index" id="exercise-index">01</span><div><p id="exercise-group">终端基础</p><h2 id="exercise-title">初识终端</h2></div></div>
+          <div class="exercise-nav" id="exercise-nav">
+            <button class="icon-button" id="prev" type="button" aria-label="上一关" title="上一关"><span data-icon="left"></span></button>
+            <button class="icon-button" id="next" type="button" aria-label="下一关" title="下一关"><span data-icon="right"></span></button>
+          </div>
+        </div>
+        <div class="exercise-grid">
+          <aside class="target card" aria-labelledby="target-title">
+            <div class="target-heading"><span class="target-icon" data-icon="target"></span><h3 id="target-title">任务目标</h3><span class="task-count" id="task-count"></span></div>
+            <p id="scenario" class="scenario"></p>
+            <ol id="goals" class="goals"></ol>
+            <div id="hint-area" class="hint-area">
+              <button class="hint-button" id="hint" type="button" aria-expanded="false" aria-controls="hint-content"><span data-icon="bulb"></span><span>查看提示</span><span data-icon="chevron" class="hint-chevron"></span></button>
+              <div id="hint-content" hidden></div>
+            </div>
+            <button class="advance" id="advance" type="button" hidden><span id="advance-label">下一关</span><span data-icon="right"></span></button>
+          </aside>
+
+          <div class="terminal card">
+            <div class="terminal-bar">
+              <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="terminal-title"><span data-icon="terminal"></span>lab-node</span>
+              <div class="terminal-actions">
+                <button class="icon-button terminal-action" id="clear" type="button" aria-label="清屏" title="清屏"><span data-icon="eraser"></span></button>
+                <button class="icon-button terminal-action" id="reset" type="button" aria-label="重置本次练习" title="重置本次练习"><span data-icon="reset"></span></button>
+              </div>
+            </div>
+            <div class="terminal-screen" id="terminal-screen">
+              <p class="welcome" id="welcome"><strong>终端已就绪</strong><span>输入命令后按 Enter 执行。</span></p>
+              <div id="output" role="log" aria-label="终端输出" aria-relevant="additions" aria-live="polite"></div>
+              <form id="command-form" autocomplete="off" class="command-form">
+                <label for="command" class="prompt" id="prompt"><span>trainee@lab</span><b>:</b><em>~</em><b>$</b></label>
+                <input id="command" type="text" aria-label="Linux 命令" aria-describedby="terminal-help" placeholder="输入命令…" spellcheck="false" autocapitalize="off" autocomplete="off" enterkeyhint="go" maxlength="700">
+                <button class="run" type="submit" aria-label="执行命令" title="执行命令"><span data-icon="play"></span><span>执行</span></button>
+              </form>
+            </div>
+            <div class="terminal-footer" id="terminal-help">
+              <span class="terminal-status" id="terminal-status" role="status"><span class="status-dot"></span><span>等待命令</span></span>
+              <span class="keyboard-help"><kbd>Enter</kbd> 执行 <kbd>↑</kbd><kbd>↓</kbd> 历史</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="main-footer"><span data-icon="shield"></span>命令仅在模拟环境中执行</footer>
+    </main>
+  </div>
+
+  <dialog id="guide-dialog" aria-labelledby="guide-title">
+    <div class="dialog-head"><div><h2 id="guide-title">命令速查</h2><p>点击示例填入终端，再按 Enter 执行。</p></div><button class="icon-button" id="close-guide" type="button" aria-label="关闭命令速查"><span data-icon="close"></span></button></div>
+    <label class="guide-search"><span data-icon="search"></span><input id="guide-search" type="search" placeholder="搜索命令或用途" autocomplete="off" aria-label="搜索命令或用途"></label>
+    <div id="guide-list" class="guide-list"></div>
+  </dialog>
+</body>
+</html>
